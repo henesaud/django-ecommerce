@@ -19,17 +19,6 @@ LABEL_CHOICES = (
     ('D', 'danger')
 )
 
-""" ADDRESS_CHOICES = (
-    ('B', 'Billing'),
-    ('S', 'Shipping'),
-) """
-
-""" 
-class UserProfile(models.Model):
-    user = models.OneToOneField(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    one_click_purchasing = models.BooleanField(default=False)
-     """
 
 
 class Item(models.Model):
@@ -80,12 +69,6 @@ class OrderItem(models.Model):
             return total
         else:
             return 0.0
-    """
-        def get_total_discount_item_price(self):
-            return self.quantity * self.item.discount_price
-    """
-    """     def get_amount_saved(self):
-            return self.get_total_item_price() - self.get_total_discount_item_price() """
 
     def get_final_price(self):
         return self.get_total_item_price()

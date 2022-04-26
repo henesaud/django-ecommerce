@@ -16,25 +16,6 @@ class AddressAdmin(admin.ModelAdmin):
     search_fields = ['user', 'street_address', 'apartment_address', 'zip']
 
 
-""" class OrderAdmin(admin.ModelAdmin):
-    list_display = ['user',
-                    'ordered',
-                    'received',
-                    'shipping_address',
-                    'payment',
-                    ]
-    list_display_links = [
-        'user',
-        'shipping_address',
-        'payment',
-    ]
-    list_filter = ['ordered',
-                   ]
-    search_fields = [
-        'user__username',
-        'ref_code'
-    ]
- """
 
 admin.site.register(Item)
 admin.site.register(OrderItem)
