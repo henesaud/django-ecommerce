@@ -1,8 +1,6 @@
-from unittest.util import _MAX_LENGTH
 from django import forms
 from django_countries.fields import CountryField
 from django_countries.widgets import CountrySelectWidget
-from pkg_resources import require
 
 
 PAYMENT_CHOICES = (
