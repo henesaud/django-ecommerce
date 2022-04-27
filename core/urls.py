@@ -8,9 +8,6 @@ from .views import (
     remove_from_cart,
     remove_single_item_from_cart,
     DashboardView
-
-
-
 )
 
 app_name = 'core'

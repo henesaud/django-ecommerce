@@ -1,7 +1,6 @@
 import random
 import string
 
-import stripe
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -11,15 +10,9 @@ from django.shortcuts import redirect
 from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
 from django.views.generic import ListView, DetailView, View
-from django.db.models import Count
 
 from .forms import CheckoutForm
 from .models import CATEGORY_CHOICES, Item, OrderItem, Order, Address
-
-
-
-def create_ref_code():
-    return ''.join(random.choices(string.ascii_lowercase + string.digits, k=20))
 
 
 def products(request):
@@ -29,15 +22,12 @@ def products(request):
     return render(request, "products.html", context)
 
 
-
-
 def is_valid_form(values):
     valid = True
     for field in values:
         if field == '':
             valid = False
     return valid
-
 
 class CheckoutView(View):
     def get(self, *args, **kwargs):
@@ -47,12 +37,10 @@ class CheckoutView(View):
             context = {
                 'form': form,
                 'order': order,
-                # 'DISPLAY_COUPON_FORM': True
             }
 
             shipping_address_qs = Address.objects.filter(
                 user=self.request.user,
-                # address_type='S',
                 default=True
             )
             if shipping_address_qs.exists():
@@ -69,14 +57,12 @@ class CheckoutView(View):
         try:
             order = Order.objects.get(user=self.request.user, ordered=False)
             if form.is_valid():
-
                 use_default_shipping = form.cleaned_data.get(
                     'use_default_shipping')
                 if use_default_shipping:
                     print("Using the defualt shipping address")
                     address_qs = Address.objects.filter(
                         user=self.request.user,
-                        # address_type='S',
                         default=True
                     )
                     if address_qs.exists():
@@ -164,9 +150,6 @@ class DashboardView(LoginRequiredMixin, View):
         except ObjectDoesNotExist:
             messages.warning(self.request, "There is no sale; Your e-commerce sucks. Hire AionSolution to get profits.")
             return redirect("/")
-
-    
-
 
 
 class ItemDetailView(DetailView):
