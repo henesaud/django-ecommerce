@@ -16,6 +16,26 @@
         </tr>
         </thead>
         <tbody>
+
+        {% for category in categories %}
+            {% if object.ordered is True%}
+                <p> deu certo</p>
+            {% endif  %}
+
+
+            
+        {% endfor %}
+      
+
+
+
+
+
+
+
+
+
+
         {% for order_item in object.items.all %}
             {% if order_item.ordered == False %}
                 <tr>

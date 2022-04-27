@@ -13,7 +13,7 @@ from django.utils import timezone
 from django.views.generic import ListView, DetailView, View
 
 from .forms import CheckoutForm
-from .models import Item, OrderItem, Order, Address
+from .models import CATEGORY_CHOICES, Item, OrderItem, Order, Address
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
@@ -155,13 +155,14 @@ class OrderSummaryView(LoginRequiredMixin, View):
 class DashboardView(LoginRequiredMixin, View):
     def get(self, *args, **kwargs):
         try:
-            order = Order.objects.get(user=self.request.user, ordered=False)
+            order = Order.objects.get(user=self.request.user, ordered=True)
             context = {
-                'object': order
+                'object': order,
+                'categories': dict(CATEGORY_CHOICES).values,
             }
             return render(self.request, 'dashboard.html', context)
         except ObjectDoesNotExist:
-            messages.warning(self.request, "You do not have an active order")
+            messages.warning(self.request, "There is no sale; Your e-commerce sucks. Hire AionSolution to get profits.")
             return redirect("/")
 
 
