@@ -17,24 +17,31 @@
         </thead>
         <tbody>
 
-        {% for category in categories %}
-            {% if object.ordered is True%}
-                <p> deu certo</p>
-            {% endif  %}
 
 
-            
-        {% endfor %}
+            {% for category in categories %}
+                {% if order.0.ordered is True%}
+                    <tr>
+                        <th scope="row">{{ forloop.counter }}</th>
+                        <td>{{ category }}</td>
+                        <td></td>
+
+                    </tr>
+                {% endif  %}
+
+
+                
+            {% endfor %}
       
 
 
+       
 
 
 
 
 
-
-
+<!-- 
 
         {% for order_item in object.items.all %}
             {% if order_item.ordered == False %}
@@ -48,12 +55,12 @@
                         <a href="{% url 'core:add-to-cart' order_item.item.slug %}"><i class="fas fa-plus ml-2"></i></a>
                     </td>
                     <td>
-                    <!-- {% if order_item.item.discount_price %}
+                    {% if order_item.item.discount_price %}
                         ${{ order_item.get_total_discount_item_price }}
                         <span class="badge badge-primary">Saving ${{ order_item.get_amount_saved }}</span>
-                    {% else %} -->
+                    {% else %}
                     ${{ order_item.get_total_item_price }}
-                <!--  {% endif %} -->
+                  {% endif %} 
                     <a style='color: red;' href="{% url 'core:remove-from-cart' order_item.item.slug %}">
                         <i class="fas fa-trash float-right"></i>
                     </a>
@@ -83,6 +90,8 @@
             </td>
         </tr>
         {% endif %}
+
+ -->
         </tbody>
     </table>
 

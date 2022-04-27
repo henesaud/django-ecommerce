@@ -11,11 +11,11 @@ from django.shortcuts import redirect
 from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
 from django.views.generic import ListView, DetailView, View
+from django.db.models import Count
 
 from .forms import CheckoutForm
 from .models import CATEGORY_CHOICES, Item, OrderItem, Order, Address
 
-stripe.api_key = settings.STRIPE_SECRET_KEY
 
 
 def create_ref_code():
@@ -155,15 +155,18 @@ class OrderSummaryView(LoginRequiredMixin, View):
 class DashboardView(LoginRequiredMixin, View):
     def get(self, *args, **kwargs):
         try:
-            order = Order.objects.get(user=self.request.user, ordered=True)
+            order = Order.objects.filter(user=self.request.user,  ordered=True)
             context = {
-                'object': order,
+                'order': order,
                 'categories': dict(CATEGORY_CHOICES).values,
             }
             return render(self.request, 'dashboard.html', context)
         except ObjectDoesNotExist:
             messages.warning(self.request, "There is no sale; Your e-commerce sucks. Hire AionSolution to get profits.")
             return redirect("/")
+
+    
+
 
 
 class ItemDetailView(DetailView):

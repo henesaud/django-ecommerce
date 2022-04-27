@@ -55,7 +55,6 @@ class OrderItem(models.Model):
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
     quantity = models.IntegerField(default=1)
     sellPrice = models.FloatField()
-    #order = models.ForeignKey(Order, on_delete=models.CASCADE)
 
     def __str__(self):
         return f"{self.quantity} of {self.item.title}"
@@ -100,7 +99,6 @@ class Address(models.Model):
     apartment_address = models.CharField(max_length=100)
     country = CountryField(multiple=False)
     zip = models.CharField(max_length=100)
-    # address_type = models.CharField(max_length=1, choices=ADDRESS_CHOICES)
     default = models.BooleanField(default=False)
 
     def __str__(self):
