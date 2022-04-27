@@ -29,6 +29,8 @@ def products(request):
     return render(request, "products.html", context)
 
 
+
+
 def is_valid_form(values):
     valid = True
     for field in values:
@@ -122,6 +124,7 @@ class CheckoutView(View):
                 payment_cpf = form.cleaned_data.get('cpf')
                 order.email = payment_email
                 order.cpf = payment_cpf
+                order.ordered = True
                 order.save()
 
                 return redirect('/')
@@ -144,6 +147,19 @@ class OrderSummaryView(LoginRequiredMixin, View):
                 'object': order
             }
             return render(self.request, 'order_summary.html', context)
+        except ObjectDoesNotExist:
+            messages.warning(self.request, "You do not have an active order")
+            return redirect("/")
+
+
+class DashboardView(LoginRequiredMixin, View):
+    def get(self, *args, **kwargs):
+        try:
+            order = Order.objects.get(user=self.request.user, ordered=False)
+            context = {
+                'object': order
+            }
+            return render(self.request, 'dashboard.html', context)
         except ObjectDoesNotExist:
             messages.warning(self.request, "You do not have an active order")
             return redirect("/")

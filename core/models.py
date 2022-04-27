@@ -24,12 +24,8 @@ LABEL_CHOICES = (
 class Item(models.Model):
     title = models.CharField(max_length=100)
     price = models.FloatField()
-    # remove
-    # discount_price = models.FloatField(blank=True, null=True)
     category = models.CharField(choices=CATEGORY_CHOICES, max_length=2)
-    # label = models.CharField(choices=LABEL_CHOICES, max_length=1)
     slug = models.SlugField()
-    # description = models.TextField()
     image = models.ImageField()
     stock = models.IntegerField(default=1)
 
@@ -59,6 +55,7 @@ class OrderItem(models.Model):
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
     quantity = models.IntegerField(default=1)
     sellPrice = models.FloatField()
+    #order = models.ForeignKey(Order, on_delete=models.CASCADE)
 
     def __str__(self):
         return f"{self.quantity} of {self.item.title}"
