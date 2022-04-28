@@ -141,9 +141,22 @@ class OrderSummaryView(LoginRequiredMixin, View):
 class DashboardView(LoginRequiredMixin, View):
     def get(self, *args, **kwargs):
         try:
-            order = Order.objects.filter(user=self.request.user,  ordered=True)
+            orderItem = OrderItem.objects.filter(user=self.request.user,  ordered=True)
+
+            cat_price= dict(CATEGORY_CHOICES)
+            cat_quantity = dict(CATEGORY_CHOICES)
+
+            cat_price.update({}.fromkeys(cat_price,0))
+            cat_quantity.update({}.fromkeys(cat_quantity,0))
+            
+            for oi in orderItem:
+                if oi.ordered is True:
+                    cat_price[oi.item.category] +=  1
+                    cat_quantity[oi.item.category] +=  oi.item.price
+
             context = {
-                'order': order,
+                'price':cat_price,
+                'quant':cat_quantity,
                 'categories': dict(CATEGORY_CHOICES).values,
             }
             return render(self.request, 'dashboard.html', context)
