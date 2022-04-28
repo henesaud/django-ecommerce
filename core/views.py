@@ -112,6 +112,8 @@ class CheckoutView(View):
                 order.cpf = payment_cpf
                 order.ordered = True
                 order.save()
+            
+            
 
                 return redirect('/')
         except ObjectDoesNotExist:

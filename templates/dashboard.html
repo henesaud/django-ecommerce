@@ -11,28 +11,19 @@
         <tr>
             <th scope="col">#</th>
             <th scope="col">Category</th>
-            <th scope="col">Sold Items</th>
+            <th scope="col">Num of sales</th>
             <th scope="col">Total sale value</th>
         </tr>
         </thead>
         <tbody>
-
-
-
-            {% for category in categories %}
-                    
-                        <tr>
-                            <th scope="row">{{ forloop.counter }}</th>
-                            <td>{{ category }}</td>
-                        </tr>
-            {% endfor %}
       
-
 
         </tbody>
     </table>
-    <p> {{ price}} </p>
-    <p>{{quant}}</p>
+    
+    <p> categories:  {{ categories}} </p>
+    <p> num of sales:  {{ quant.values}} </p>
+    <p> total sale value: {{price.values}}</p>
     </div>
 
     </div>
