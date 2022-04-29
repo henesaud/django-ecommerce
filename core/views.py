@@ -175,6 +175,7 @@ class ItemDetailView(DetailView):
 @login_required
 def add_to_cart(request, slug):
     item = get_object_or_404(Item, slug=slug)
+
     order_item, created = OrderItem.objects.get_or_create(
         item=item,
         user=request.user,
@@ -182,18 +183,27 @@ def add_to_cart(request, slug):
         sellPrice=item.price
     )
     order_qs = Order.objects.filter(user=request.user, ordered=False)
-    if order_qs.exists():
+    if order_qs.exists():    
+
         order = order_qs[0]
-        # check if the order item is in the order
-        if order.items.filter(item__slug=item.slug).exists():
-            order_item.quantity += 1
-            order_item.save()
-            messages.info(request, "This item quantity was updated.")
+        if (item.stock == 0):
+            messages.info(request, "No enough stock!")
             return redirect("core:order-summary")
         else:
-            order.items.add(order_item)
-            messages.info(request, "This item was added to your cart.")
-            return redirect("core:order-summary")
+            # check if the order item is in the order
+            if order.items.filter(item__slug=item.slug).exists():
+                order_item.quantity += 1
+                order_item.save()
+                item.stock -= 1
+                item.save()
+                messages.info(request, "This item quantity was updated.")
+                return redirect("core:order-summary")
+            else:
+                order.items.add(order_item)
+                item.stock -= 1
+                item.save()
+                messages.info(request, "This item was added to your cart.")
+                return redirect("core:order-summary")
     else:
         ordered_date = timezone.now()
         order = Order.objects.create(
@@ -220,7 +230,9 @@ def remove_from_cart(request, slug):
                 ordered=False
             )[0]
             order.items.remove(order_item)
+            item.stock +=  order_item.quantity
             order_item.delete()
+            item.save()
             messages.info(request, "This item was removed from your cart.")
             return redirect("core:order-summary")
         else:
@@ -252,6 +264,8 @@ def remove_single_item_from_cart(request, slug):
                 order_item.save()
             else:
                 order.items.remove(order_item)
+            item.stock += 1
+            item.save()
             messages.info(request, "This item quantity was updated.")
             return redirect("core:order-summary")
         else:
