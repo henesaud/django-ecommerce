@@ -56,6 +56,7 @@ class CheckoutView(View):
         form = CheckoutForm(self.request.POST or None)
         try:
             order = Order.objects.get(user=self.request.user, ordered=False)
+            orderI = OrderItem.objects.filter(user=self.request.user, ordered=False)
             if form.is_valid():
                 use_default_shipping = form.cleaned_data.get(
                     'use_default_shipping')
@@ -112,10 +113,10 @@ class CheckoutView(View):
                 order.cpf = payment_cpf
                 order.ordered = True
                 order.save()
-            
-            
-
+                orderI.update(ordered=True)
                 return redirect('/')
+
+
         except ObjectDoesNotExist:
             messages.warning(self.request, "You do not have an active order")
             return redirect("core:order-summary")
@@ -150,16 +151,15 @@ class DashboardView(LoginRequiredMixin, View):
 
             cat_price.update({}.fromkeys(cat_price,0))
             cat_quantity.update({}.fromkeys(cat_quantity,0))
-            
-            for oi in orderItem:
-                if oi.ordered is True:
-                    cat_price[oi.item.category] +=  1
-                    cat_quantity[oi.item.category] +=  oi.item.price
-
+            total_sale = 0
+            for order_item in orderItem:
+                if order_item.ordered is True:
+                    cat_price[order_item.item.category] +=  order_item.sellPrice * order_item.quantity
+                    cat_quantity[order_item.item.category] +=  order_item.quantity
             context = {
-                'price':cat_price,
-                'quant':cat_quantity,
-                'categories': dict(CATEGORY_CHOICES).values,
+                'price': list(cat_price.values()),
+                'quant':list(cat_quantity.values()),
+                'categories': list(dict(CATEGORY_CHOICES).values() ),
             }
             return render(self.request, 'dashboard.html', context)
         except ObjectDoesNotExist:
