@@ -4,26 +4,25 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('core', '0005_auto_20220426_0029'),
+        ("core", "0005_auto_20220426_0029"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='order',
-            name='being_delivered',
+            model_name="order",
+            name="being_delivered",
         ),
         migrations.RemoveField(
-            model_name='order',
-            name='coupon',
+            model_name="order",
+            name="coupon",
         ),
         migrations.RemoveField(
-            model_name='order',
-            name='refund_granted',
+            model_name="order",
+            name="refund_granted",
         ),
         migrations.RemoveField(
-            model_name='order',
-            name='refund_requested',
+            model_name="order",
+            name="refund_requested",
         ),
     ]

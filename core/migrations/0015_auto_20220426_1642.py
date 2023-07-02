@@ -4,31 +4,30 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('core', '0014_order_cpf'),
+        ("core", "0014_order_cpf"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='order',
-            name='billing_address',
+            model_name="order",
+            name="billing_address",
         ),
         migrations.RemoveField(
-            model_name='order',
-            name='received',
+            model_name="order",
+            name="received",
         ),
         migrations.RemoveField(
-            model_name='order',
-            name='ref_code',
+            model_name="order",
+            name="ref_code",
         ),
         migrations.RemoveField(
-            model_name='orderitem',
-            name='price',
+            model_name="orderitem",
+            name="price",
         ),
         migrations.AddField(
-            model_name='orderitem',
-            name='priceSell',
+            model_name="orderitem",
+            name="priceSell",
             field=models.FloatField(default=0.0),
             preserve_default=False,
         ),
